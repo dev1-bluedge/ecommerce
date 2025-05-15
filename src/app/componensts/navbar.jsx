@@ -54,7 +54,7 @@ function Navbar() {
                 }
               </div>
             </div>
-            <div className="md:hidden ">
+            <div className="md:hidden w-full">
               {isOpen ? (
                 <ImCross
                   size={22}
@@ -62,11 +62,14 @@ function Navbar() {
                   onClick={() => setBox({ ...box, isOpen: !isOpen })}
                 />
               ) : (
-                <FaBarsStaggered
-                  size={22}
-                  color="white"
-                  onClick={() => setBox({ ...box, isOpen: !isOpen })}
-                />
+                <div className="flex justify-between items-center w-full">
+                  <h1 className="font-bold text-3xl text-white">Zalvox</h1>
+                  <FaBarsStaggered
+                    size={22}
+                    color="white"
+                    onClick={() => setBox({ ...box, isOpen: !isOpen })}
+                  />
+                </div>
               )}
             </div>
           </div>
