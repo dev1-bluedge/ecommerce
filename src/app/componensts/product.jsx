@@ -12,12 +12,12 @@ function ProductSection() {
     {
       id: 1,
       name: "Product 1",
-      price: 3900,
-      stock: "3",
-      sellprice: 3500,
+      amount: 3900,
       image: "/mobile-banner.png",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      stock: "3",
+      sellprice: 3500,
     },
 
     {

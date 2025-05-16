@@ -5,6 +5,7 @@ import Whatsappbutton from "./componensts/whatsappbutton";
 import { Toaster } from "@/components/ui/sonner";
 
 import CartProvider from "@/lib/cart-context";
+import ClientWrapper from "./componensts/clientwrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +20,6 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Zalvox - Your Ultimate Shopping Destination",
   description: "Zalvox - Your Ultimate Shopping Destination",
-
 };
 
 export default function RootLayout({ children }) {
@@ -28,11 +28,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        
-        <CartProvider>{children}</CartProvider>
+        <ClientWrapper>
+          <CartProvider>{children}</CartProvider>
         <Toaster position="top-right" />
         <Whatsappbutton />
         <Footer />
+        </ClientWrapper>
       </body>
     </html>
   );

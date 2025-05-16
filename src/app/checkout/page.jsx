@@ -15,6 +15,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CartItem } from "@/lib/cart-context";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { orderCheckout } from "../actions/products";
 
 const checkoutSchema = z.object({
   contact: z.string().min(1, "Contact is required"),
@@ -29,7 +32,9 @@ const checkoutSchema = z.object({
 });
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const { carts } = useContext(CartItem);
+  console.log("TCL: CheckoutPage -> carts", carts);
   const total = carts?.reduce((acc, item) => {
     return acc + item.sellprice * item.quantity;
   }, 0);
@@ -43,8 +48,29 @@ export default function CheckoutPage() {
     resolver: zodResolver(checkoutSchema),
   });
 
+  const mutation = useMutation({
+    mutationFn: orderCheckout,
+    onSuccess: (data) => {
+      toast.success("Order place successfully");
+      router.push("/");
+    },
+    onError: (error) => {
+      toast.error(`Order failed ${error.message}`);
+    },
+  });
+
   const onSubmit = (data) => {
-    console.log("Checkout Data:", data);
+    const items = carts.map((item) => ({
+      productId: String(item.id),
+      quantity: item.quantity,
+    }));
+
+    const payload = {
+      items,
+      totalAmount: total,
+      user : data,
+    };
+    mutation.mutate(payload)
   };
 
   return (
@@ -59,13 +85,9 @@ export default function CheckoutPage() {
             <h1 className="text-xl font-medium mb-4">Your cart is empty</h1>
           </div>
         ) : (
-         <div className="w-full lg:w-1/2 bg-gray-50 p-3 rounded-md sticky top-6 h-fit">
+          <div className="w-full lg:w-1/2 bg-gray-50 p-3 rounded-md sticky top-6 h-fit">
             <h1 className="text-xl font-medium mb-2">Order Summary</h1>
-            <ScrollArea
-              className={
-                "h-[30vh] w-full  rounded-md border p-2 "
-              }
-            >
+            <ScrollArea className={"h-[30vh] w-full  rounded-md border p-2 "}>
               {carts.map((item) => (
                 <div key={item.id} className="flex items-center mb-4">
                   <div className="relative">
@@ -83,32 +105,36 @@ export default function CheckoutPage() {
                   <div>
                     <p className="font-medium">{item.name}</p>
                     <p className="text-sm text-gray-600">
-                      Rs.{Number(item.sellprice * item.quantity).toLocaleString("en-PK")}.00 PKR
+                      Rs.
+                      {Number(item.sellprice * item.quantity).toLocaleString(
+                        "en-PK"
+                      )}
+                      .00 PKR
                     </p>
                   </div>
                 </div>
               ))}
             </ScrollArea>
-              <div>
-          <div className="flex justify-between text-sm">
-            <p>Subtotal</p>
-            <p>Rs.{Number(total).toLocaleString("en-PK")}.00 PKR</p>
-          </div>
-          <div className="flex justify-between text-sm mb-2">
-            <p>Shipping</p>
-            <p>FREE</p>
-          </div>
-          <hr />
-          <div className="flex justify-between font-semibold text-lg mt-2">
-            <p>Total</p>
-            <p className="font-semibold">
-              Rs.{Number(total).toLocaleString("en-PK")}.00 PKR
-            </p>
-          </div>
-        </div>
+            <div>
+              <div className="flex justify-between text-sm">
+                <p>Subtotal</p>
+                <p>Rs.{Number(total).toLocaleString("en-PK")}.00 PKR</p>
+              </div>
+              <div className="flex justify-between text-sm mb-2">
+                <p>Shipping</p>
+                <p>FREE</p>
+              </div>
+              <hr />
+              <div className="flex justify-between font-semibold text-lg mt-2">
+                <p>Total</p>
+                <p className="font-semibold">
+                  Rs.{Number(total).toLocaleString("en-PK")}.00 PKR
+                </p>
+              </div>
+            </div>
           </div>
         )}
-      
+
         {/* right Section - Form */}
         <div className="w-full lg:w-1/2 space-y-6 lg:space-y-6">
           {/* Contact */}

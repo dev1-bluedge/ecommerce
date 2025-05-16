@@ -16,11 +16,21 @@ function Page() {
   // send item id to the server and get the single product data
   const productsdetails = [
     {
-      id: 1,
+      id: "682659548c170d58aee9388e",
       name: "Product 1",
       price: 3900,
       stock: "3",
       sellprice: 3500,
+      image: "/mobile-banner.png",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    },
+    {
+      id: "682659968c170d58aee93892",
+      name: "Product2",
+      price: 30,
+      stock: "3",
+      sellprice: 300,
       image: "/mobile-banner.png",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
